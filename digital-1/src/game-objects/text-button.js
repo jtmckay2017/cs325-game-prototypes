@@ -13,7 +13,7 @@ export class TextButton extends Phaser.GameObjects.Text {
     }
 
     enterButtonActiveState() {
-        this.setStyle({ fill: '#0ff' });
+        this.setStyle({ fill: '#FFFF00' });
     }
 
     enterButtonRestState() {

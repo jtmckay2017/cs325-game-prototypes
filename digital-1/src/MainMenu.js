@@ -22,7 +22,7 @@ export class MainMenu extends Phaser.Scene {
         this.scene.backgroundColor = "#34cceb";
 
         playButton = new TextButton(
-            this, 100, 100,
+            this, 350, 400,
             'Start Game', 
             { fill: '#0f0'}, 
             () => {

@@ -21,7 +21,7 @@ export class Game extends Phaser.Scene {
     }
 
     create() {         
-        solids = this.physics.add.staticGroup();
+        // solids = this.physics.add.staticGroup();
 
         this.cameras.main.backgroundColor = "#2fd44a";
         console.log(game)
@@ -43,7 +43,7 @@ export class Game extends Phaser.Scene {
     
     update(time, delta) {
 
-        player.body.setVelocity(0);
+        // player.body.setVelocity(0);
 
         // Horizontal movement
         if (cursors.left.isDown)
@@ -53,16 +53,14 @@ export class Game extends Phaser.Scene {
         else if (cursors.right.isDown)
         {
             player.body.setVelocityX(120);
+        } else {
+            player.setVelocityX(0);
         }
 
         // Vertical movement
-        if (cursors.up.isDown)
+        if (cursors.up.isDown && player.body.touching.down)
         {
-            player.body.setVelocityY(-120);
+            player.body.setVelocityY(-100);
         }
-        else if (cursors.down.isDown)
-        {
-            player.body.setVelocityY(120);
-        }  
     }
 }
