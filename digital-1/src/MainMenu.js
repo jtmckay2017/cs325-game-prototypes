@@ -18,13 +18,19 @@ export class MainMenu extends Phaser.Scene {
         music.play();
 
         
+        let text = this.add.text(400, 200, 'Slammin!', {
+            fontSize: '64px',
+        }).setOrigin(0.5)
 
         this.scene.backgroundColor = "#34cceb";
 
         playButton = new TextButton(
-            this, 350, 400,
+            this, 400, 400,
             'Start Game', 
-            { fill: '#0f0'}, 
+            { 
+                fill: '#0f0',
+                fontSize: '24px'
+            }, 
             () => {
                 //	Ok, the Play Button has been clicked or touched, so let's stop the music (otherwise it'll carry on playing)
                 music.stop();
@@ -32,7 +38,7 @@ export class MainMenu extends Phaser.Scene {
                 //	And start the actual game
                 this.scene.start('Game');
             }
-        );
+        ).setOrigin(0.5);
         this.add.existing(playButton)
 
     }
