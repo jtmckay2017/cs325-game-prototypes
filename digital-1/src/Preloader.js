@@ -83,9 +83,14 @@ export class Preloader extends Phaser.Scene {
         this.load.image('titlePage', 'assets/title.jpg');
         this.load.atlas('playButton', 'assets/play_button.png', 'assets/play_button.json');
         this.load.audio('titleMusic', ['assets/Poppers and Prosecco.mp3']);
+        this.load.audio('throwSound', ['assets/throw_sound.wav']);
         //	+ lots of other required assets here
         this.load.image( 'logo', 'assets/phaser.png' );
         this.load.image('mainPlayer', 'assets/main_player.png');
+        this.load.image('ground', 'assets/ground.png');
+        this.load.image('toilet_paper', 'assets/toilet_paper.png');
+        this.load.image('poop', 'assets/poop.png');
+        this.load.image('white_block', 'assets/white_block.png');
 
     }
 
