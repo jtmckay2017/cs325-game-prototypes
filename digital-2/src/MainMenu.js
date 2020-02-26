@@ -18,7 +18,7 @@ export class MainMenu extends Phaser.Scene {
         music.play();
 
         
-        let text = this.add.text(400, 200, 'Poop Panic!', {
+        let text = this.add.text(400, 200, 'Fartastic!', {
             fontSize: '64px',
         }).setOrigin(0.5)
 

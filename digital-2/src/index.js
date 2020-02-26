@@ -13,7 +13,8 @@ var config = {
         arcade: {
             gravity: { y: 980 }
         }
-	},
+    },
+    backgroundColor: "#000000",
 	scene: [
 		Boot,
 		Preloader,
