@@ -107,7 +107,7 @@ export class Game extends Phaser.Scene {
         }}
       
     addPlayer(playerInfo) {
-        this.machine = this.physics.add.image(playerInfo.x, playerInfo.y, 'machine').setOrigin(0.5, 0.5).setDisplaySize(100,100);
+        this.machine = this.physics.add.image(playerInfo.x, playerInfo.y, 'machine').setOrigin(0.5, 0.5).setDisplaySize(50,50);
         if (playerInfo.team === 'blue') {
           this.machine.setTint(0xccf5ff);
         } else {
@@ -119,7 +119,7 @@ export class Game extends Phaser.Scene {
       }
       
     addOtherPlayers(playerInfo) {
-        const otherPlayer = this.add.sprite(playerInfo.x, playerInfo.y, 'machine').setOrigin(0.5, 0.5).setDisplaySize(100,100);
+        const otherPlayer = this.add.sprite(playerInfo.x, playerInfo.y, 'machine').setOrigin(0.5, 0.5).setDisplaySize(50,50);
         if (playerInfo.team === 'blue') {
           otherPlayer.setTint(0xccf5ff);
         } else {

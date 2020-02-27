@@ -1,16 +1,16 @@
 {
-  "_from": "digital-2",
-  "_id": "digital-2@1.0.9",
+  "_from": "digital-3",
+  "_id": "digital-3@1.0.9",
   "_inBundle": false,
   "_integrity": "sha1-LjcGrYyrmeviglDjCgHet6eZzhc=",
-  "_location": "/digital-2",
+  "_location": "/digital-3",
   "_phantomChildren": {},
   "_requested": {
     "type": "tag",
     "registry": true,
-    "raw": "digital-2",
-    "name": "digital-2",
-    "escapedName": "digital-2",
+    "raw": "digital-3",
+    "name": "digital-3",
+    "escapedName": "digital-3",
     "rawSpec": "",
     "saveSpec": null,
     "fetchSpec": "latest"
@@ -19,9 +19,9 @@
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/digital-2/-/digital-2-1.0.9.tgz",
+  "_resolved": "https://registry.npmjs.org/digital-3/-/digital-3-1.0.9.tgz",
   "_shasum": "2e3706ad8cab99ebe28250e30a01deb7a799ce17",
-  "_spec": "digital-2",
+  "_spec": "digital-3",
   "_where": "/Users/joel/dev/GMU/CS325/cs325-game-prototypes",
   "author": {
     "name": "Richard Davey",
@@ -29,33 +29,40 @@
     "url": "http://www.photonstorm.com"
   },
   "bugs": {
-    "url": "https://github.com/photonstorm/digital-2/issues"
+    "url": "https://github.com/photonstorm/digital-3/issues"
   },
   "bundleDependencies": false,
   "dependencies": {
-    "express": "^4.17.1",
-    "http": "0.0.0",
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "babel": "^6.23.0",
+    "babel-loader": "^8.0.6",
     "phaser": "^3.3.0",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0"
   },
   "deprecated": false,
   "description": "A Phaser 3 Project Template",
   "devDependencies": {
+    "copy-webpack-plugin": "^5.1.1",
     "raw-loader": "^0.5.1",
-    "webpack": "^3.4.1",
-    "webpack-dev-server": "^2.11.0"
+    "webpack": "4.35.0",
+    "webpack-cli": "3.3.5",
+    "webpack-dev-server": "3.7.2"
   },
-  "homepage": "https://github.com/photonstorm/digital-2#readme",
+  "homepage": "https://github.com/photonstorm/digital-3#readme",
   "license": "MIT",
   "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
   "main": "src/index.js",
-  "name": "digital-2",
+  "name": "digital-3",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/photonstorm/digital-2.git"
+    "url": "git+https://github.com/photonstorm/digital-3.git"
   },
   "scripts": {
-    "build": "webpack",
+    "webpack": "webpack",
+    "build": "npm run webpack -- --mode production",
+    "dev": "npm run webpack -- --mode development --watch",
     "start": "npm run build && webpack-dev-server --port=8000"
   },
   "version": "1.0.9"

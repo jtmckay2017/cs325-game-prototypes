@@ -18,15 +18,20 @@ export class MainMenu extends Phaser.Scene {
         music.play();
 
         
-        let text = this.add.text(400, 200, 'Laundromat Royal', {
+        let text = this.add.text(400, 200, 'Laundromat.io', {
             fontSize: '64px',
         }).setOrigin(0.5)
+        let text2 = this.add.text(400, 280, 'Enter your name!', {
+            fontSize: '24px',
+        }).setOrigin(0.5)
+        let nameForm = this.add.dom(400, 320).createFromCache('nameForm');
+
 
         this.scene.backgroundColor = "#34cceb";
 
         playButton = new TextButton(
             this, 400, 400,
-            'Start Game', 
+            'Join Game', 
             { 
                 fill: '#0f0',
                 fontSize: '24px'

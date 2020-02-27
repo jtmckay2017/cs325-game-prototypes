@@ -87,6 +87,7 @@ export class Preloader extends Phaser.Scene {
         //	+ lots of other required assets here
         this.load.image('machine', 'assets/washing_machine.png');
         this.load.image('cloth', 'assets/cloth.png');
+        this.load.html('nameForm', 'assets/text/nameForm.html');
 
     }
 

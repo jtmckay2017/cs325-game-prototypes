@@ -2,10 +2,9 @@
 <html>
 <head>
 	<meta charset="UTF-8" />
-	<title>Mini Game</title>
+	<title>Laundromat Royal</title>
     <script src="production-dependencies.bundle.js"></script>
     <script src="app.bundle.js"></script>
-    
 
 <style>
 body
@@ -23,91 +22,86 @@ body
 <body>
 <div id="game"></div>
 <div id="readme">
-<h2>Mini Game</h2>
-
-<ul>
-<li><strong>Originality:</strong>
-This game uses the artillary mechanic to skillfully shoot down poops with toilet paper.
-
-<li><strong>Technical Merit:</strong>
-I mainly focused on the background workings of the game to be able to reuse in later games.
-1. Easy way to load assets and loading scene with info.
-2. Seperate files to store each scene.
-3. Reusable main menu.
-</li>
-
-<li><strong>Prototype Postmortem:</strong>
-How to setup Phaser 3 and a semi-complicated game setup.
-The most difficult part was porting everything over to Phaser 3 and getting my code
-to compile with out errors
-</li>
-
-<li><strong>Prototype Assets:</strong>
-Did you make your prototype assets from scratch? Did you borrow them? Cite your sources here.
-<ul>
-<li>Loading screen: self-made</li>
-<li>Character image: self-made</li>
-<li>Wall block: self-made</li>
-<li>Ground image: <a href="https://www.piskelapp.com/p/agxzfnBpc2tlbC1hcHByEwsSBlBpc2tlbBiAgIDSycidCAw/view">ground</a></li>
-<li>Poop image: <a href="https://webstockreview.net/explore/poop-clipart-sprite-sheet/">poop</a></li>
-<li>Music: "Poppers and Proseco" Kevin MacLeod (<a href="incompetech.com">incompetech.com</a>). Licensed under <a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons: By Attribution 3.0 License</a></li>
-<li>Throw Sound: <a href="https://freesound.org/people/marchon11/sounds/493224/">throw</a>
-</ul>
-</li>
-
-<li><strong>Prototype Closest Other Game:</strong>
-Which other game most closely resembles your game? If you are borrowing code from a Phaser Example, you must say so here. If you borrow code from elsewhere, you must say so here.
-<ul>
-<li>The code for this example is adapted from the <a href="https://github.com/photonstorm/phaser/tree/v2.6.2/resources/Project%20Templates/Basic">Phaser Basic Project Template</a></li>
-<li>The code for this example is adapted from the <a href="https://gamemechanicexplorer.com/#bullets-4">Phaser bullets-4 example</a></li>
-<li>The code for this example is adapted from the <a href="https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/">Phaser preloader example</a></li>
-</ul>
-</li>
-
-<li><strong>High Concept:</strong>
-Take down the invading poop with your infinite supply of toilet paper.
-</li>
-
-<li><strong>Theme:</strong>
-Man most not get poop on him.
-</li>
-
-<li><strong>Mandated Variety:</strong>
-Only need to use the mouse to aim your gun.
-Poop is spawned at random speeds and up-down velocitys.
-</li>
-
-<li><strong>Prototype Goal:</strong>
-Skill based shooting with an artillery style.
-</li>
-
-<li><strong>Player Experience Goals:</strong>
-I want to get a small laugh and quick enjoyment from the low-skill based shoot-em-up.
-</li>
-
-<li><strong>Gameplay:</strong>
-The core mechanic is to use your mouse to point and click to shoot at incoming <b>projectiles</b>.  
-Do not let the poop get to your white line or the game is over!
-You have a shot delay to be careful when choosing your shot.
-</li>
-
-<li><strong>Strategies:</strong>
-The player will always make sure he is fire at all times to get the most toilet paper out at once. 
-</li>
-
-<li><strong>Story/Setting/Premise:</strong>
-Tom is not feeling well today, and the only way to get out of this alive is to defeat the deadly ache!
-</li>
-
-<li><strong>Target Audience:</strong>
-Anyone, the game has a low barrier of entry.
-</li>
-
-<li><strong>Play Time:</strong>
-Endless, as long as you can survive.
-</li>
-
-</ul>
+        <h2>Laundromat Royal</h2>
+        
+        <ul>
+        <li><strong>Originality:</strong>
+        This game is about collecting more clothes then the other team! It implements multiplayer with client-server model. 
+        
+        <li><strong>Technical Merit:</strong>
+        This was way more technical than I first thought it was going to be.<br>
+        Client-Server model game using express.js and socket.io to send realtime data back and forth.<br>
+        Server hosted on AWS EC2 instance so anyone can connect over the internet.
+        </li>
+        
+        <li><strong>Prototype Postmortem:</strong>
+        I think I bet off a bit more than I could chew but I the tutorial I followed to set it up was easy and informative.  However getting my server onto
+        aws was a bit of a challege.  Luckily I have work experience with all of these things so It made the process much smoother.
+        </li>
+        
+        <li><strong>Prototype Assets:</strong>
+        Did you make your prototype assets from scratch? Did you borrow them? Cite your sources here.
+        <ul>
+        <li>Loading screen: self-made</li>
+        <li>Character image: self-made</li>
+        <li>Wall block: self-made</li>
+        <li>Ground image: <a href="https://www.piskelapp.com/p/agxzfnBpc2tlbC1hcHByEwsSBlBpc2tlbBiAgIDSycidCAw/view">ground</a></li>
+        <li>Poop image: <a href="https://webstockreview.net/explore/poop-clipart-sprite-sheet/">poop</a></li>
+        <li>Music: "Poppers and Proseco" Kevin MacLeod (<a href="incompetech.com">incompetech.com</a>). Licensed under <a href="http://creativecommons.org/licenses/by/3.0/">Creative Commons: By Attribution 3.0 License</a></li>
+        <li>Throw Sound: <a href="https://freesound.org/people/marchon11/sounds/493224/">throw</a>
+        </ul>
+        </li>
+        
+        <li><strong>Prototype Closest Other Game:</strong>
+        Which other game most closely resembles your game? If you are borrowing code from a Phaser Example, you must say so here. If you borrow code from elsewhere, you must say so here.
+        <ul>
+        <li>The code for this example is adapted from the <a href="https://gamedevacademy.org/create-a-basic-multiplayer-game-in-phaser-3-with-socket-io-part-1/">Multiplayer games in Phaser part 1</a></li>
+        <li>The code for this example is adapted from the <a href="https://gamedevacademy.org/create-a-basic-multiplayer-game-in-phaser-3-with-socket-io-part-2/">Multiplayer games in Phaser part 2</a></li>
+        </ul>
+        </li>
+        
+        <li><strong>High Concept:</strong>
+        Wash more clothes than the enemy team.
+        </li>
+        
+        <li><strong>Theme:</strong>
+        Laundromat battle!
+        </li>
+        
+        <li><strong>Mandated Variety:</strong>
+        A freakin multiplayer game man.
+        </li>
+        
+        <li><strong>Prototype Goal:</strong>
+        Create a basic multiplayer prototype that you could connect to from anywhere.
+        </li>
+        
+        <li><strong>Player Experience Goals:</strong>
+        I want a shared experience game where players can interact with eacher other slightly competitively.
+        </li>
+        
+        <li><strong>Gameplay:</strong>
+        The core mechanic is collecting clothes to wash with your team as others try and <i>out wash</i> you. <br>
+        Work together to get the most points!
+        </li>
+        
+        <li><strong>Strategies:</strong>
+        Not sure what the strategies are would need to playtest more.
+        </li>
+        
+        <li><strong>Story/Setting/Premise:</strong>
+        It is all out chaos at the laundromat and only the best laundromat team can make it out alive.
+        </li>
+        
+        <li><strong>Target Audience:</strong>
+        Anyone, the game has a low barrier of entry.
+        </li>
+        
+        <li><strong>Play Time:</strong>
+        Endless??
+        </li>
+        
+        </ul>
 </div>
 </body>
 </html>
