@@ -1,59 +1,41 @@
 {
-  "_from": "digital-3",
-  "_id": "digital-3@1.0.9",
-  "_inBundle": false,
-  "_integrity": "sha1-LjcGrYyrmeviglDjCgHet6eZzhc=",
-  "_location": "/digital-3",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "tag",
-    "registry": true,
-    "raw": "digital-3",
-    "name": "digital-3",
-    "escapedName": "digital-3",
-    "rawSpec": "",
-    "saveSpec": null,
-    "fetchSpec": "latest"
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "https://registry.npmjs.org/digital-3/-/digital-3-1.0.9.tgz",
-  "_shasum": "2e3706ad8cab99ebe28250e30a01deb7a799ce17",
-  "_spec": "digital-3",
-  "_where": "/Users/joel/dev/GMU/CS325/cs325-game-prototypes",
-  "author": {
-    "name": "Richard Davey",
-    "email": "rdavey@gmail.com",
-    "url": "http://www.photonstorm.com"
-  },
-  "bugs": {
-    "url": "https://github.com/photonstorm/digital-3/issues"
-  },
-  "bundleDependencies": false,
-  "dependencies": {
-    "phaser": "^3.3.0"
-  },
-  "deprecated": false,
-  "description": "A Phaser 3 Project Template",
-  "devDependencies": {
-    "raw-loader": "^0.5.1",
-    "webpack": "^3.4.1",
-    "webpack-dev-server": "^2.11.0"
-  },
-  "homepage": "https://github.com/photonstorm/digital-3#readme",
-  "license": "MIT",
-  "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
-  "main": "src/index.js",
-  "name": "digital-3",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/photonstorm/digital-3.git"
-  },
+  "name": "phaser3-multiplayer-example-with-geckos.io",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "build": "webpack",
-    "start": "npm run build && webpack-dev-server --port=8000"
+    "dev": "npm-run-all --parallel parcel:serve server:serve",
+    "build": "npm run parcel:build",
+    "start": "NODE_ENV=production node server/server.js",
+    "test": "node test/test.js",
+    "pm2:start": "NODE_ENV=production pm2 start server/server.js --max-memory-restart 240M",
+    "parcel:build": "parcel build index.html --no-source-maps",
+    "parcel:serve": "parcel serve index.html --no-source-maps",
+    "server:serve": "nodemon --delay 500ms server/server.js"
   },
-  "version": "1.0.9"
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/polyfill": "^7.7.0",
+    "@geckos.io/client": "^1.1.8",
+    "@geckos.io/phaser-on-nodejs": "^1.0.3",
+    "@geckos.io/server": "^1.1.8",
+    "axios": "^0.18.1",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "phaser": "^3.20.1"
+  },
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "parcel": "^1.12.4",
+    "parcel-plugin-static-files-copy": "^2.2.1",
+    "puppeteer": "^2.0.0"
+  },
+  "staticFiles": {
+    "staticPath": [
+      "client/assets"
+    ]
+  }
 }
