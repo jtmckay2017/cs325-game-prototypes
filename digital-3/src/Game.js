@@ -24,7 +24,7 @@ export class Game extends Phaser.Scene {
     create() {
         // Connect to server sfa
         console.log('man');
-        this.socket = io.connect('https://joelmckay.cloud:9000/', { rejectUnauthorized: false });
+        this.socket = io.connect('https://joelmckay.cloud:9000/', { secure: true });
         // Send over the juicy player name
         this.socket.on('connect', () => { 
           this.socket.emit('updateName', this.playerName);
