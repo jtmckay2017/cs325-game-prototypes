@@ -37,11 +37,19 @@ export class MainMenu extends Phaser.Scene {
                 fontSize: '24px'
             }, 
             () => {
-                //	Ok, the Play Button has been clicked or touched, so let's stop the music (otherwise it'll carry on playing)
-                music.stop();
-        
-                //	And start the actual game
-                this.scene.start('Game');
+
+                let inputText = nameForm.getChildByName('nameField');
+    
+                //  Have they entered anything?
+                if (inputText.value !== '')
+                {
+                    //	Ok, the Play Button has been clicked or touched, so let's stop the music (otherwise it'll carry on playing)
+                    music.stop();
+            
+                    //	And start the actual game
+                    this.scene.start('Game', { playerName: inputText.value });
+                }
+
             }
         ).setOrigin(0.5);
         this.add.existing(playButton)

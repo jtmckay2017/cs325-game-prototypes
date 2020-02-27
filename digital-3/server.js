@@ -29,16 +29,27 @@ io.on('connection', function (socket) {
     x: Math.floor(Math.random() * 700) + 50,
     y: Math.floor(Math.random() * 500) + 50,
     playerId: socket.id,
-    team: (Math.floor(Math.random() * 2) == 0) ? 'red' : 'blue'
+    team: (Math.floor(Math.random() * 2) == 0) ? 'red' : 'blue',
+    playerName: ''
   };
+
   // send the players object to the new player
   socket.emit('currentPlayers', players);
+
   // send the cloth object to the new player
   socket.emit('clothLocation', cloth);
   // send the current scores
   socket.emit('scoreUpdate', scores);
-  // update all other players of the new player
-  socket.broadcast.emit('newPlayer', players[socket.id]);
+
+
+  socket.on('updateName', function (name) {
+    players[socket.id].playerName = name;
+    // update all other players of the new player
+    socket.broadcast.emit('newPlayer', players[socket.id]);
+  })
+
+
+
 
   socket.on('clothCollected', function () {
     if (players[socket.id].team === 'red') {

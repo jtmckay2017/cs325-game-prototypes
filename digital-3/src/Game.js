@@ -3,6 +3,7 @@ var bouncy = null;
 var player = null
 var cursors = null;
 
+
 var solids = null;
 import io from 'socket.io-client';
 
@@ -11,6 +12,9 @@ export class Game extends Phaser.Scene {
     constructor() {
         super("Game");
     }
+    init(data) {
+      this.playerName = data.playerName;
+    }
 
     preload() {
         this.load.image('machine', 'assets/washing_machine.png');
@@ -18,8 +22,12 @@ export class Game extends Phaser.Scene {
       }
        
     create() {
+        // Connect to server
         this.socket = io.connect('http://192.168.1.157:25565');
-        console.log(this.socket);
+        // Send over the juicy player name
+        this.socket.on('connect', () => { 
+          this.socket.emit('updateName', this.playerName);
+        });
         this.otherPlayers = this.physics.add.group();
       
         this.socket.on('currentPlayers', (players) => {
@@ -40,6 +48,7 @@ export class Game extends Phaser.Scene {
           this.otherPlayers.getChildren().forEach((otherPlayer) => {
             if (playerId === otherPlayer.playerId) {
               otherPlayer.destroy();
+              otherPlayer.nameText.destroy();
             }
           });
         });
@@ -49,15 +58,19 @@ export class Game extends Phaser.Scene {
             if (playerInfo.playerId === otherPlayer.playerId) {
               otherPlayer.setRotation(playerInfo.rotation);
               otherPlayer.setPosition(playerInfo.x, playerInfo.y);
+              otherPlayer.nameText.setPosition(playerInfo.x, playerInfo.y - 40);
             }
+
+
           });
         });
       
         this.cursors = this.input.keyboard.createCursorKeys();
       
-        this.blueScoreText = this.add.text(16, 16, '', { fontSize: '32px', fill: '#ccf5ff' });
-        this.redScoreText = this.add.text(584, 16, '', { fontSize: '32px', fill: '#ffdfde' });
-          
+        this.blueScoreText = this.add.text(20, 16, '', { fontSize: '32px', fill: '#ccf5ff' });
+        this.redScoreText = this.add.text(650, 16, '', { fontSize: '32px', fill: '#ffdfde' });
+        this.playersText = this.add.text(400, 32, 'Players', { fontSize: '18px', fill: '#ffffff'}).setOrigin(0.5,0.5);
+
         this.socket.on('scoreUpdate', (scores) => {
           this.blueScoreText.setText('Blue: ' + scores.blue);
           this.redScoreText.setText('Red: ' + scores.red);
@@ -73,6 +86,7 @@ export class Game extends Phaser.Scene {
       }
        
     update() {
+
         if (this.machine) {
           if (this.cursors.left.isDown) {
             this.machine.setAngularVelocity(-150);
@@ -104,9 +118,11 @@ export class Game extends Phaser.Scene {
             y: this.machine.y,
             rotation: this.machine.rotation
           };
+
         }}
       
     addPlayer(playerInfo) {
+        console.log(playerInfo);
         this.machine = this.physics.add.image(playerInfo.x, playerInfo.y, 'machine').setOrigin(0.5, 0.5).setDisplaySize(50,50);
         if (playerInfo.team === 'blue') {
           this.machine.setTint(0xccf5ff);
@@ -119,6 +135,7 @@ export class Game extends Phaser.Scene {
       }
       
     addOtherPlayers(playerInfo) {
+        console.log(playerInfo);
         const otherPlayer = this.add.sprite(playerInfo.x, playerInfo.y, 'machine').setOrigin(0.5, 0.5).setDisplaySize(50,50);
         if (playerInfo.team === 'blue') {
           otherPlayer.setTint(0xccf5ff);
@@ -127,6 +144,12 @@ export class Game extends Phaser.Scene {
         }
         otherPlayer.playerId = playerInfo.playerId;
         this.otherPlayers.add(otherPlayer);
+        let name = this.add.text(playerInfo.x,playerInfo.y - 40,playerInfo.playerName,{
+          fontFamily:'Arial',
+          color:'#ffffff',
+          align:'center',
+        }).setFontSize(18).setOrigin(0.5, 0.5);
+        otherPlayer.nameText = name;
       }
       
 }
