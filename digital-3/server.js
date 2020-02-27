@@ -23,10 +23,7 @@ var cloth = {
   x: Math.floor(Math.random() * 700) + 50,
   y: Math.floor(Math.random() * 500) + 50
 };
-var scores = {
-  blue: 0,
-  red: 0
-};
+
 
 // app.use(express.static(__dirname + '/public'));
  
@@ -43,7 +40,8 @@ io.on('connection', function (socket) {
     y: Math.floor(Math.random() * 500) + 50,
     playerId: socket.id,
     team: (Math.floor(Math.random() * 2) == 0) ? 'red' : 'blue',
-    playerName: ''
+    playerName: '',
+    score: 0
   };
 
   // send the players object to the new player
@@ -52,7 +50,7 @@ io.on('connection', function (socket) {
   // send the cloth object to the new player
   socket.emit('clothLocation', cloth);
   // send the current scores
-  socket.emit('scoreUpdate', scores);
+  socket.emit('scoreUpdate', players);
 
 
   socket.on('updateName', function (name) {
@@ -65,15 +63,16 @@ io.on('connection', function (socket) {
 
 
   socket.on('clothCollected', function () {
-    if (players[socket.id].team === 'red') {
-      scores.red += 10;
-    } else {
-      scores.blue += 10;
-    }
+    players[socket.id].score += 10;
+    // if (players[socket.id].team === 'red') {
+    //   scores.red += 10;
+    // } else {
+    //   scores.blue += 10;
+    // }
     cloth.x = Math.floor(Math.random() * 700) + 50;
     cloth.y = Math.floor(Math.random() * 500) + 50;
     io.emit('clothLocation', cloth);
-    io.emit('scoreUpdate', scores);
+    io.emit('scoreUpdate', players);
   });
 
   socket.on('disconnect', function () {

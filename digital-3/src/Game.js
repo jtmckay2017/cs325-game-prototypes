@@ -68,13 +68,20 @@ export class Game extends Phaser.Scene {
       
         this.cursors = this.input.keyboard.createCursorKeys();
       
-        this.blueScoreText = this.add.text(20, 16, '', { fontSize: '32px', fill: '#ccf5ff' });
-        this.redScoreText = this.add.text(650, 16, '', { fontSize: '32px', fill: '#ffdfde' });
-        this.playersText = this.add.text(400, 32, 'Players', { fontSize: '18px', fill: '#ffffff'}).setOrigin(0.5,0.5);
+        this.socket.on('scoreUpdate', (players) => {
+          Object.values(players).forEach(player => {
+            console.log(player)
 
-        this.socket.on('scoreUpdate', (scores) => {
-          this.blueScoreText.setText('Blue: ' + scores.blue);
-          this.redScoreText.setText('Red: ' + scores.red);
+            if (player.playerId == this.socket.id) {
+              console.log('my score!')
+              this.myScoreText.setText(player.score)
+            }
+            this.otherPlayers.getChildren().forEach(otherPlayer => {
+              if (player.playerId == otherPlayer.playerId) {
+                otherPlayer.nameText.setText(player.playerName + " | " + player.score)
+              }
+            })
+          })
         });
       
         this.socket.on('clothLocation', (clothLocation) => {
@@ -119,6 +126,7 @@ export class Game extends Phaser.Scene {
             y: this.machine.y,
             rotation: this.machine.rotation
           };
+          this.myScoreText.setPosition(this.machine.x, this.machine.y-40);
 
         }}
       
@@ -130,6 +138,11 @@ export class Game extends Phaser.Scene {
         } else {
           this.machine.setTint(0xffdfde);
         }
+        this.myScoreText = this.add.text(playerInfo.x,playerInfo.y - 40,playerInfo.score,{
+          fontFamily:'Arial',
+          color:'#ffffff',
+          align:'center',
+        }).setFontSize(18).setOrigin(0.5, 0.5);
         this.machine.setDrag(500);
         this.machine.setAngularDrag(100);
         this.machine.setMaxVelocity(200);
@@ -138,11 +151,6 @@ export class Game extends Phaser.Scene {
     addOtherPlayers(playerInfo) {
         console.log(playerInfo);
         const otherPlayer = this.add.sprite(playerInfo.x, playerInfo.y, 'machine').setOrigin(0.5, 0.5).setDisplaySize(50,50);
-        if (playerInfo.team === 'blue') {
-          otherPlayer.setTint(0xccf5ff);
-        } else {
-          otherPlayer.setTint(0xffdfde);
-        }
         otherPlayer.playerId = playerInfo.playerId;
         this.otherPlayers.add(otherPlayer);
         let name = this.add.text(playerInfo.x,playerInfo.y - 40,playerInfo.playerName,{
