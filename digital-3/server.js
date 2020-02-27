@@ -1,16 +1,17 @@
 var express = require('express');
 var https = require('https');
 var fs = require('fs');
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/joelmckay.cloud/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/joelmckay.cloud/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/joelmckay.cloud/chain.pem', 'utf8');
 
-var key = fs.readFileSync('./selfsigned.key', 'utf8');
-var cert = fs.readFileSync('./selfsigned.crt', 'utf8');
-console.log(key)
-var options = {
-  key: key,
-  cert: cert
+const credentials = {
+	key: privateKey,
+	cert: certificate,
+	ca: ca
 };
 var app = express();
-var server = https.createServer(options, app);
+var server = https.createServer(credentials, app);
 var io = require('socket.io').listen(server);
 
 
@@ -93,6 +94,6 @@ io.on('connection', function (socket) {
   });
 });
 
-server.listen(25565, function () {
+server.listen(9000, function () {
   console.log(`Listening on ${server.address().port}`);
 });
