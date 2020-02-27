@@ -69,8 +69,8 @@ io.on('connection', function (socket) {
     // } else {
     //   scores.blue += 10;
     // }
-    cloth.x = Math.floor(Math.random() * 700) + 50;
-    cloth.y = Math.floor(Math.random() * 500) + 50;
+    cloth.x = Math.floor(Math.random() * 1100) + 50;
+    cloth.y = Math.floor(Math.random() * 900) + 50;
     io.emit('clothLocation', cloth);
     io.emit('scoreUpdate', players);
   });

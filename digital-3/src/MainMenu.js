@@ -18,19 +18,30 @@ export class MainMenu extends Phaser.Scene {
         music.play({loop:true});
 
         
-        let text = this.add.text(400, 200, 'Laundromat.io', {
+        let text = this.add.text(640, 200, 'Laundromat.io', {
             fontSize: '64px',
         }).setOrigin(0.5)
-        let text2 = this.add.text(400, 280, 'Enter your name!', {
+        text.alpha = 0.1;
+        this.tweens.add({
+            targets: text,
+            alphaTopLeft: { value: 1, duration: 5000, ease: 'Power1' },
+            alphaBottomRight: { value: 1, duration: 10000, ease: 'Power1' },
+            alphaBottomLeft: { value: 1, duration: 5000, ease: 'Power1', delay: 5000 },
+            yoyo: true,
+            loop: -1
+    
+        });        
+        
+        let text2 = this.add.text(640, 280, 'Enter your name!', {
             fontSize: '24px',
         }).setOrigin(0.5)
-        let nameForm = this.add.dom(400, 320).createFromCache('nameForm');
+        let nameForm = this.add.dom(640, 320).createFromCache('nameForm');
 
 
         this.scene.backgroundColor = "#34cceb";
 
         playButton = new TextButton(
-            this, 400, 400,
+            this, 640, 400,
             'Join Game', 
             { 
                 fill: '#0f0',
@@ -53,6 +64,15 @@ export class MainMenu extends Phaser.Scene {
             }
         ).setOrigin(0.5);
         this.add.existing(playButton)
+        this.tweens.add({
+            targets: playButton,
+            duration: 1000,
+            y: 415,
+            delay: 1,
+            ease: 'Sine.easeInOut',
+            repeat: -1,
+            yoyo: true
+        });
 
     }
 
