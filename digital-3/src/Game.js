@@ -133,11 +133,6 @@ export class Game extends Phaser.Scene {
     addPlayer(playerInfo) {
         console.log(playerInfo);
         this.machine = this.physics.add.image(playerInfo.x, playerInfo.y, 'machine').setOrigin(0.5, 0.5).setDisplaySize(50,50);
-        if (playerInfo.team === 'blue') {
-          this.machine.setTint(0xccf5ff);
-        } else {
-          this.machine.setTint(0xffdfde);
-        }
         this.myScoreText = this.add.text(playerInfo.x,playerInfo.y - 40,playerInfo.score,{
           fontFamily:'Arial',
           color:'#ffffff',
