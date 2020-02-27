@@ -60,7 +60,7 @@ export class Game extends Phaser.Scene {
             if (playerInfo.playerId === otherPlayer.playerId) {
               otherPlayer.setRotation(playerInfo.rotation);
               otherPlayer.setPosition(playerInfo.x, playerInfo.y);
-              otherPlayer.nameText.setPosition(playerInfo.x, playerInfo.y - 40);
+              otherPlayer.nameText.setPosition(playerInfo.x, playerInfo.y - 55);
             }
 
 
@@ -90,7 +90,7 @@ export class Game extends Phaser.Scene {
           this.cloth = this.physics.add.image(clothLocation.x, clothLocation.y, 'cloth');
           this.physics.add.overlap(this.machine, this.cloth, () => {
             this.socket.emit('clothCollected');
-            this.pickupSound.play();
+            this.pickupSound.play()
           }, null, this);
         });
       }
@@ -128,14 +128,14 @@ export class Game extends Phaser.Scene {
             y: this.machine.y,
             rotation: this.machine.rotation
           };
-          this.myScoreText.setPosition(this.machine.x, this.machine.y-40);
+          this.myScoreText.setPosition(this.machine.x, this.machine.y-55);
 
         }}
       
     addPlayer(playerInfo) {
         console.log(playerInfo);
-        this.machine = this.physics.add.image(playerInfo.x, playerInfo.y, 'machine').setOrigin(0.5, 0.5).setDisplaySize(50,50);
-        this.myScoreText = this.add.text(playerInfo.x,playerInfo.y - 40,playerInfo.score,{
+        this.machine = this.physics.add.image(playerInfo.x, playerInfo.y, 'machine').setOrigin(0.5, 0.5).setDisplaySize(75,75);
+        this.myScoreText = this.add.text(playerInfo.x,playerInfo.y - 55,playerInfo.score,{
           fontFamily:'Arial',
           color:'#ffffff',
           align:'center',
@@ -147,10 +147,10 @@ export class Game extends Phaser.Scene {
       
     addOtherPlayers(playerInfo) {
         console.log(playerInfo);
-        const otherPlayer = this.add.sprite(playerInfo.x, playerInfo.y, 'machine').setOrigin(0.5, 0.5).setDisplaySize(50,50);
+        const otherPlayer = this.add.sprite(playerInfo.x, playerInfo.y, 'machine').setOrigin(0.5, 0.5).setDisplaySize(75,75);
         otherPlayer.playerId = playerInfo.playerId;
         this.otherPlayers.add(otherPlayer);
-        let name = this.add.text(playerInfo.x,playerInfo.y - 40,playerInfo.playerName,{
+        let name = this.add.text(playerInfo.x,playerInfo.y - 55,playerInfo.playerName,{
           fontFamily:'Arial',
           color:'#ffffff',
           align:'center',
