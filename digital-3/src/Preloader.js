@@ -82,8 +82,8 @@ export class Preloader extends Phaser.Scene {
         //	As this is just a Project Template I've not provided these assets, swap them for your own.
         this.load.image('titlePage', 'assets/title.jpg');
         this.load.atlas('playButton', 'assets/play_button.png', 'assets/play_button.json');
-        this.load.audio('titleMusic', ['assets/Poppers and Prosecco.mp3']);
-        this.load.audio('throwSound', ['assets/throw_sound.wav']);
+        this.load.audio('titleMusic', ['assets/gamemusic.wav']);
+        this.load.audio('pickup', ['assets/got_pickup.wav']);
         //	+ lots of other required assets here
         this.load.image('machine', 'assets/washing_machine.png');
         this.load.image('cloth', 'assets/cloth.png');

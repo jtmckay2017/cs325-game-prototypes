@@ -22,6 +22,7 @@ export class Game extends Phaser.Scene {
       }
        
     create() {
+        this.pickupSound = this.sound.add('pickup');
         // Connect to server sfa
         console.log('man');
         this.socket = io.connect('https://joelmckay.cloud:9000/', { secure: true });
@@ -89,6 +90,7 @@ export class Game extends Phaser.Scene {
           this.cloth = this.physics.add.image(clothLocation.x, clothLocation.y, 'cloth');
           this.physics.add.overlap(this.machine, this.cloth, () => {
             this.socket.emit('clothCollected');
+            this.pickupSound.play();
           }, null, this);
         });
       }

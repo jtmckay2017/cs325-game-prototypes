@@ -15,7 +15,7 @@ export class MainMenu extends Phaser.Scene {
         //	Naturally I expect you to do something significantly better :)
 
         music = this.sound.add('titleMusic');
-        music.play();
+        music.play({loop:true});
 
         
         let text = this.add.text(400, 200, 'Laundromat.io', {
@@ -44,7 +44,7 @@ export class MainMenu extends Phaser.Scene {
                 if (inputText.value !== '')
                 {
                     //	Ok, the Play Button has been clicked or touched, so let's stop the music (otherwise it'll carry on playing)
-                    music.stop();
+                    // music.stop();
             
                     //	And start the actual game
                     this.scene.start('Game', { playerName: inputText.value });
