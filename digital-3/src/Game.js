@@ -22,8 +22,9 @@ export class Game extends Phaser.Scene {
       }
        
     create() {
-        // Connect to server
-        this.socket = io.connect('http://54.208.193.221:9000');
+        // Connect to server sfa
+        console.log('man');
+        this.socket = io.connect('https://joelmckay.cloud:9000/', { rejectUnauthorized: false });
         // Send over the juicy player name
         this.socket.on('connect', () => { 
           this.socket.emit('updateName', this.playerName);

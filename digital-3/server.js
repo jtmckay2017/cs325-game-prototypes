@@ -1,7 +1,19 @@
 var express = require('express');
+var https = require('https');
+var fs = require('fs');
+
+var key = fs.readFileSync('./selfsigned.key', 'utf8');
+var cert = fs.readFileSync('./selfsigned.crt', 'utf8');
+console.log(key)
+var options = {
+  key: key,
+  cert: cert
+};
 var app = express();
-var server = require('http').Server(app);
+var server = https.createServer(options, app);
 var io = require('socket.io').listen(server);
+
+
 
 // SERVER VARS
 var players = {};
