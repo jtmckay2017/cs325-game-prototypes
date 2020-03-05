@@ -86,10 +86,10 @@ export class Game extends Phaser.Scene {
     update() {
         if (this.cursors.left.isDown) {
             // If the LEFT key is down, set the player velocity to move left
-            this.player.body.velocity.x = -this.MAX_SPEED;
+            this.player.body.velocity.x = -this.MAX_SPEED * this.time.timeScale;
         } else if (this.cursors.right.isDown) {
             // If the RIGHT key is down, set the player velocity to move right
-            this.player.body.velocity.x = this.MAX_SPEED;
+            this.player.body.velocity.x = this.MAX_SPEED * this.time.timeScale;
         } else {
             // Stop the player from moving horizontally
             this.player.body.velocity.x = 0;
