@@ -42,8 +42,9 @@ export class Game extends Phaser.Scene {
         this.MAX_SPEED = 500; // pixels/second
         this.score = 0;
         this.gameOver = false;
+        this.spawner = 250
         // Create a player sprite
-        this.player = this.physics.add.sprite(600, 500, 'player1');
+        this.player = this.physics.add.sprite(600, 500, 'farmer').setScale(0.1);;
         this.player.setCollideWorldBounds(true);
         this.player.onWorldBounds = true;
 
@@ -51,9 +52,9 @@ export class Game extends Phaser.Scene {
         this.eggGroup = this.add.group();
         // Spawn eggs
         this.time.addEvent({
-            delay: 250,
+            delay: 150,
             callback: ()=>{
-                var egg = this.physics.add.sprite(Phaser.Math.Between(0, 1200), 0, 'poop').setScale(1);
+                var egg = this.physics.add.sprite(Phaser.Math.Between(0, 1200), 0, 'egg').setScale(0.25);
                 this.eggGroup.add(egg)
             },
             loop: true

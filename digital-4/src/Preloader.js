@@ -85,8 +85,9 @@ export class Preloader extends Phaser.Scene {
         this.load.audio('titleMusic', ['assets/gamemusic.wav']);
         this.load.audio('pickup', ['assets/got_pickup.wav']);
         //	+ lots of other required assets here
-        this.load.image('machine', 'assets/washing_machine.png');
-        this.load.image('cloth', 'assets/cloth.png');
+        this.load.image('egg', 'assets/egg.png');
+        this.load.image('farmer', 'assets/farmer.png');
+        this.load.image('ground', 'assets/ground.png');
         this.load.html('nameForm', 'assets/text/nameForm.html');
 
     }
