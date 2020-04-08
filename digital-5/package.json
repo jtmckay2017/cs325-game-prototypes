@@ -1,0 +1,70 @@
+{
+  "_from": "digital-5",
+  "_id": "digital-5@1.0.9",
+  "_inBundle": false,
+  "_integrity": "sha1-LjcGrYyrmeviglDjCgHet6eZzhc=",
+  "_location": "/digital-5",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "digital-5",
+    "name": "digital-5",
+    "escapedName": "digital-5",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/digital-5/-/digital-5-1.0.9.tgz",
+  "_shasum": "2e3706ad8cab99ebe28250e30a01deb7a799ce17",
+  "_spec": "digital-5",
+  "_where": "/Users/joel/dev/GMU/CS325/cs325-game-prototypes",
+  "author": {
+    "name": "Richard Davey",
+    "email": "rdavey@gmail.com",
+    "url": "http://www.photonstorm.com"
+  },
+  "bugs": {
+    "url": "https://github.com/photonstorm/digital-5/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "babel": "^6.23.0",
+    "babel-loader": "^8.0.6",
+    "https": "^1.0.0",
+    "phaser": "^3.3.0",
+    "socket.io": "^2.3.0",
+    "socket.io-client": "^2.3.0"
+  },
+  "deprecated": false,
+  "description": "A Phaser 3 Project Template",
+  "devDependencies": {
+    "copy-webpack-plugin": "^5.1.1",
+    "raw-loader": "^0.5.1",
+    "webpack": "4.35.0",
+    "webpack-cli": "3.3.5",
+    "webpack-dev-server": "3.7.2"
+  },
+  "homepage": "https://github.com/photonstorm/digital-5#readme",
+  "license": "MIT",
+  "licenseUrl": "http://www.opensource.org/licenses/mit-license.php",
+  "main": "src/index.js",
+  "name": "digital-5",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/photonstorm/digital-5.git"
+  },
+  "scripts": {
+    "webpack": "webpack",
+    "build": "npm run webpack -- --mode production",
+    "dev": "npm run webpack -- --mode development --watch",
+    "start": "npm run build && webpack-dev-server --port=8000"
+  },
+  "version": "1.0.9"
+}
