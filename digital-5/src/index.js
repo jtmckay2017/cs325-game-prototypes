@@ -5,19 +5,23 @@ import { MainMenu } from './MainMenu'
 import { Preloader } from './Preloader'
 
 var config = {
+    type: Phaser.AUTO,
     parent: 'game',
     width: 1280,
-    height: 1000,
+    height: 720,
+    pixelArt: true,
+    backgroundColor: '#df9f71',
+    seed: "1234",
     dom: {
         createContainer: true
     },
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 980 }
+            gravity: { y: 0 },
+            debug: true
         }
     },
-    backgroundColor: "#000000",
 	scene: [
 		Boot,
 		Preloader,

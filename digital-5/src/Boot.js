@@ -10,7 +10,6 @@ export class Boot extends Phaser.Scene {
         this.input.maxPointers = 1;
         // //  Phaser will automatically pause if the browser tab the game is in loses focus. You can disable that here:
         // game.stage.disableVisibilityChange = true;
-
     }
 
     preload() {
@@ -23,6 +22,8 @@ export class Boot extends Phaser.Scene {
 
         //  By this point the preloader assets have loaded to the cache, we've set the game settings
         //  So now let's start the real preloader going
+        this.cameras.main.backgroundColor = Phaser.Display.Color.HexStringToColor("#3498db");
+
         this.scene.start('Preloader');
 
     }

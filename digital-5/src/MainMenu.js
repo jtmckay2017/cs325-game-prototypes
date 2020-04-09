@@ -14,15 +14,15 @@ export class MainMenu extends Phaser.Scene {
         //	Here all we're doing is playing some music and adding a picture and button
         //	Naturally I expect you to do something significantly better :)
         if (!this.music) {
-            this.music = this.sound.add('titleMusic');
+            this.music = this.sound.add('day_desert_ambient');
             this.music.play({loop:true});
         }
 
-
+        this.add.image(0, 0, 'sky').setOrigin(0, 0);
         
-        let text = this.add.text(640, 200, 'Egg Dodge', {
+        let text = this.add.text(this.scale.width / 2, this.scale.height / 5, 'Deserted', {
             fontSize: '64px',
-        }).setOrigin(0.5)
+        }).setOrigin(0.5).setColor("Black")
         text.alpha = 0.1;
         this.tweens.add({
             targets: text,
@@ -34,18 +34,18 @@ export class MainMenu extends Phaser.Scene {
     
         });        
         
-        let text2 = this.add.text(640, 280, 'Time to get YOKED', {
-            fontSize: '24px',
-        }).setOrigin(0.5)
+        let text2 = this.add.text(this.scale.width / 2, this.scale.height / 4 + 15, 'Desolate Survival', {
+            fontSize: '24px'
+        }).setOrigin(0.5).setColor("Black")
 
 
         this.scene.backgroundColor = "#34cceb";
 
         playButton = new TextButton(
-            this, 640, 400,
-            'Start Game', 
+            this, this.scale.width / 2, this.scale.height / 2,
+            'Begin', 
             { 
-                fill: '#0f0',
+                fill: '#000000',
                 fontSize: '24px'
             }, 
             () => {
@@ -59,7 +59,7 @@ export class MainMenu extends Phaser.Scene {
         this.tweens.add({
             targets: playButton,
             duration: 1000,
-            y: 415,
+            y:  (this.scale.height / 2) + 5,
             delay: 1,
             ease: 'Sine.easeInOut',
             repeat: -1,

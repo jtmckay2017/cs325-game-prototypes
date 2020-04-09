@@ -18,8 +18,7 @@ export class Preloader extends Phaser.Scene {
         var progressBar = this.add.graphics();
         var progressBox = this.add.graphics();
         progressBox.fillStyle(0x222222, 0.8);
-        progressBox.fillRect(240 + 240, 270+255, 320, 50);
-
+        progressBox.fillRect(this.scale.width / 2- 250, this.scale.height / 2 + 20, 500, 50);
         // Text for loading...
         var width = this.cameras.main.width;
         var height = this.cameras.main.height;
@@ -49,7 +48,7 @@ export class Preloader extends Phaser.Scene {
         // Text for what has been loaded
         var assetText = this.make.text({
             x: width / 2,
-            y: height / 2 + 50,
+            y: height / 2 + 45,
             text: '',
             style: {
                 font: '18px monospace',
@@ -58,11 +57,11 @@ export class Preloader extends Phaser.Scene {
         });
         assetText.setOrigin(0.5, 0.5);
 
-        this.load.on('progress', function (value) {
+        this.load.on('progress', (value) => {
             console.log(value);
             progressBar.clear();
             progressBar.fillStyle(0xffffff, 1);
-            progressBar.fillRect(250 + 240, 280+255, 300 * value, 30);
+            progressBar.fillRect(this.scale.width / 2 + 10 - 250, this.scale.height / 2 + 30, 480 * value, 30);
             percentText.setText(parseInt(value * 100) + '%');
         });
 
@@ -82,12 +81,11 @@ export class Preloader extends Phaser.Scene {
         //	As this is just a Project Template I've not provided these assets, swap them for your own.
         this.load.image('titlePage', 'assets/title.jpg');
         this.load.atlas('playButton', 'assets/play_button.png', 'assets/play_button.json');
-        this.load.audio('titleMusic', ['assets/gamemusic.wav']);
-        this.load.audio('pickup', ['assets/got_pickup.wav']);
+        this.load.audio('day_desert_ambient', ['assets/day_desert_ambient.mp3']);
+        this.load.audio('dark_desert_ambient', ['assets/dark_desert_ambient.mp3']);
+        this.load.audio('day_to_dark_change', ['assets/day_to_dark_change_sfx.mp3']);
+
         //	+ lots of other required assets here
-        this.load.image('egg', 'assets/egg.png');
-        this.load.image('farmer', 'assets/farmer.png');
-        this.load.image('ground', 'assets/ground.png');
         this.load.html('nameForm', 'assets/text/nameForm.html');
 
     }
