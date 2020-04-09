@@ -84,6 +84,8 @@ export class Preloader extends Phaser.Scene {
         this.load.audio('day_desert_ambient', ['assets/day_desert_ambient.mp3']);
         this.load.audio('dark_desert_ambient', ['assets/dark_desert_ambient.mp3']);
         this.load.audio('day_to_dark_change', ['assets/day_to_dark_change_sfx.mp3']);
+        this.load.audio('shoot', ['assets/shoot.wav']);
+        this.load.audio('hit', ['assets/hit.wav']);
 
         //	+ lots of other required assets here
         this.load.html('nameForm', 'assets/text/nameForm.html');

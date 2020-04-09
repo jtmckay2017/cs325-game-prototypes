@@ -13,6 +13,7 @@ var enemies = null;
 var baseCore = null;
 var baseCoreHealthBar = null;
 var rnd = null;
+var gameOver = false;
 var Bullet = new Phaser.Class({
 
     Extends: Phaser.GameObjects.Image,
@@ -28,7 +29,7 @@ var Bullet = new Phaser.Class({
         this.direction = 0;
         this.xSpeed = 0;
         this.ySpeed = 0;
-        this.setSize(12, 12, true);
+        // this.setSize(12, 12, true);
     },
 
     // Fires a bullet from the player to the reticle
@@ -78,7 +79,7 @@ var Enemy = new Phaser.Class({
     function Enemy (scene)
     {
         Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'player_handgun');
-        this.speed = 1;
+        this.speed = Phaser.Math.Between(100, 400);
         this.health = 5;
         console.log(baseCore)
     },
@@ -113,6 +114,7 @@ export class Game extends Phaser.Scene {
         // Reduce health of enemy
         if (bulletHit.active === true && enemyHit.active === true)
         {
+            this.hitSound.play();
             enemyHit.health = enemyHit.health - 1;
             enemyHit.receiveDamage(1);
             // Destroy bullet
@@ -131,16 +133,19 @@ export class Game extends Phaser.Scene {
         this.load.image('target', 'assets/ball.png');
         this.load.tilemapTiledJSON('map', 'assets/desert.json');
         this.load.image('tiles', 'assets/tmw_desert_tilemap.png');
+        this.shootSound = this.sound.add('shoot');
+        this.hitSound = this.sound.add('hit');
 
     }
     
     create ()
     {
+        this.time.timeScale = 1;
+        gameOver = false;
         rnd = Phaser.Math.RND;
 
         baseCoreHealthBar = this.add.graphics();
         baseCoreHealthBar.setScrollFactor(0);
-
 
         var map = this.make.tilemap({ key: 'map' });
         var tiles = map.addTilesetImage('tiles');
@@ -194,6 +199,14 @@ export class Game extends Phaser.Scene {
         this.input.keyboard.on('keydown_D', (event) => {
             player.setAccelerationX(1000);
         });
+
+        this.input.keyboard.on('keydown_E', (event) => {
+            if (gameOver) {
+                this.scene.start('MainMenu')
+            }
+        });
+
+
     
         // Stops player acceleration on uppress of WASD keys
         this.input.keyboard.on('keyup_W', (event) => {
@@ -235,6 +248,7 @@ export class Game extends Phaser.Scene {
             if (bullet)
             {
                 bullet.fire(player, reticle);
+                this.shootSound.play();
             }
         }, this);
     
@@ -251,17 +265,17 @@ export class Game extends Phaser.Scene {
         this.physics.add.collider(baseCore, enemies, this.baseCoreHit, null, this);
         this.physics.add.overlap(enemies, playerBullets, this.enemyHitCallback, null, this);
         this.time.addEvent({
-            delay: 2000,
+            delay: 1500,
             callback: () => {
                 console.log("spawning new enemy")
                 var enemy = enemies.get();
-                enemy.setPosition(baseCore.x + 100 * (rnd.sign()), baseCore.y + 100 * (rnd.sign()))
+                enemy.setPosition(baseCore.x + 1000 * (rnd.sign()), baseCore.y + 1000 * (rnd.sign()))
                 console.log(enemy);
                 if (enemy)
                 {
                     enemy.setActive(true);
                     enemy.setVisible(true);
-                    this.physics.moveToObject(enemy, baseCore, 100);
+                    this.physics.moveToObject(enemy, baseCore, enemy.speed);
                     // // place the enemy at the start of the path
                     // enemy.startOnPath();
                     
@@ -270,6 +284,7 @@ export class Game extends Phaser.Scene {
             },
             loop: true
         })
+        this.updateBaseCoreHealthBar()
     
     }
 
@@ -314,8 +329,18 @@ export class Game extends Phaser.Scene {
 
     baseCoreHit (baseCore, enemy) {
         console.log('attacking core')
-        if (baseCore.health > 0)
+        if (baseCore.health > 0) {
             baseCore.health -= 5;
+        }
+        else {
+            this.time.timeScale = 0;
+            let gameOverText = this.add.text(this.scale.width / 2, this.scale.height / 2, 'Game Over ):\nPress E to restart.', {
+                fontSize: '48px',
+            }).setOrigin(0.5,0.5)
+            gameOver = true;
+            baseCore.setVisible(false);
+        }
+        this.updateBaseCoreHealthBar()
         enemy.destroy();
     }
 
@@ -337,6 +362,10 @@ export class Game extends Phaser.Scene {
         // Constrain position of reticle
         this.constrainReticle(reticle);
 
+
+    }
+
+    updateBaseCoreHealthBar() {
         baseCoreHealthBar.clear();
         baseCoreHealthBar.fillStyle(0xff0000 , 1);
         baseCoreHealthBar.fillRect(this.scale.width + 75, this.scale.height + 250, 500 * (baseCore.health / 100), 50);

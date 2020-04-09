@@ -18,7 +18,7 @@ export class MainMenu extends Phaser.Scene {
             this.music.play({loop:true});
         }
 
-        this.add.image(0, 0, 'sky').setOrigin(0, 0);
+        // this.add.image(0, 0, 'sky').setOrigin(0, 0);
         
         let text = this.add.text(this.scale.width / 2, this.scale.height / 5, 'Deserted', {
             fontSize: '64px',
@@ -51,6 +51,7 @@ export class MainMenu extends Phaser.Scene {
             () => {
 
                 this.scene.start('Game');
+                this.sound.add('day_to_dark_change').play();
 
 
             }
