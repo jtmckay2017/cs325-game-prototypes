@@ -90,7 +90,7 @@ var Enemy = new Phaser.Class({
     // Enemy Constructor
     function Enemy (scene)
     {
-        Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'player_handgun');
+        Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'player_handgun')
         this.speed = Phaser.Math.Between(100, 400);
         this.health = 5;
         console.log(baseCore)
@@ -194,7 +194,7 @@ export class Game extends Phaser.Scene {
         baseCore.health = 100;
 
         // Set image/sprite properties
-        player.setOrigin(0.5, 0.5).setDisplaySize(80, 70).setCollideWorldBounds(false).setDrag(2000, 2000);
+        player.setOrigin(0.5, 0.5).setCollideWorldBounds(false).setDrag(2000, 2000).setDisplaySize(60, 50);
         reticle.setOrigin(0.5, 0.5).setDisplaySize(25, 25).setCollideWorldBounds(false);
     
         // Set camera zoom
@@ -389,6 +389,7 @@ export class Game extends Phaser.Scene {
             callback: () => {
                 console.log("spawning new enemy")
                 var enemy = enemies.get();
+                enemy.setDisplaySize(60, 50);
                 enemy.setPosition(baseCore.x + 1000 * (rnd.sign()), baseCore.y + 1000 * (rnd.sign()))
                 console.log(enemy);
                 if (enemy)
