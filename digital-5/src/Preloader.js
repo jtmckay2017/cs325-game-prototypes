@@ -87,6 +87,18 @@ export class Preloader extends Phaser.Scene {
         this.load.audio('shoot', ['assets/shoot.wav']);
         this.load.audio('hit', ['assets/hit.wav']);
 
+
+        this.load.spritesheet('player_handgun', 'assets/player_handgun.png',
+            { frameWidth: 66, frameHeight: 60 }
+        ); // Made by tokkatrain: https://tokkatrain.itch.io/top-down-basic-set
+        this.load.image('target', 'assets/ball.png');
+
+        this.load.tilemapTiledJSON('map', 'assets/Level1.json');
+        this.load.image('terrain_atlas', 'assets/terrain_atlas.png');
+        this.load.image('items', 'assets/items.png');
+
+        this.load.image('level1', 'assets/Level1.png');
+
         //	+ lots of other required assets here
         this.load.html('nameForm', 'assets/text/nameForm.html');
 

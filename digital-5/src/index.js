@@ -10,6 +10,7 @@ var config = {
     width: 1280,
     height: 720,
     pixelArt: true,
+    antialias: false,
     backgroundColor: '#df9f71',
     seed: "1234",
     dom: {

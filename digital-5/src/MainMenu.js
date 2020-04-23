@@ -51,7 +51,6 @@ export class MainMenu extends Phaser.Scene {
             () => {
 
                 this.scene.start('Game');
-                this.sound.add('day_to_dark_change').play();
 
 
             }

@@ -1,19 +1,31 @@
 import { Physics } from "phaser";
 
 // Create your own variables.
-var bouncy = null;
+// global state variables
+var gameOver = false;
+var wave = 0;
+var spawnDelay = 3000;
+var rnd = null;
+var waveTime = 30000
+
+var waveTimeEvent = null;
+var enemySpawnEvent = null;
+
+// entities
 var player = null;
-var cursors = null;
-var reticle = null;
-var moveKeys = null;
-var solids = null;
 var playerBullets = null;
-var enemy = null;
 var enemies = null;
 var baseCore = null;
+
+
+// controls
+var moveKeys = null;
+
+// ui
+var reticle = null;
 var baseCoreHealthBar = null;
-var rnd = null;
-var gameOver = false;
+var waveText = null;
+
 var Bullet = new Phaser.Class({
 
     Extends: Phaser.GameObjects.Image,
@@ -127,15 +139,9 @@ export class Game extends Phaser.Scene {
     {
         // Load in images and sprites
     
-        this.load.spritesheet('player_handgun', 'assets/player_handgun.png',
-            { frameWidth: 66, frameHeight: 60 }
-        ); // Made by tokkatrain: https://tokkatrain.itch.io/top-down-basic-set
-        this.load.image('target', 'assets/ball.png');
-        this.load.tilemapTiledJSON('map', 'assets/desert.json');
-        this.load.image('tiles', 'assets/tmw_desert_tilemap.png');
         this.shootSound = this.sound.add('shoot');
         this.hitSound = this.sound.add('hit');
-
+        this.newWaveSound = this.sound.add('day_to_dark_change');
     }
     
     create ()
@@ -144,15 +150,31 @@ export class Game extends Phaser.Scene {
         gameOver = false;
         rnd = Phaser.Math.RND;
 
-        baseCoreHealthBar = this.add.graphics();
-        baseCoreHealthBar.setScrollFactor(0);
+        // this.add.sprite(0,0,'level1').setOrigin(0, 0).setDisplaySize(5000, 5000);
 
-        var map = this.make.tilemap({ key: 'map' });
-        var tiles = map.addTilesetImage('tiles');
-        var layer = map.createStaticLayer(0, tiles, 0, 0);
+        baseCoreHealthBar = this.add.graphics();
+
+        var style = { font: "30px Verdana", fill: "#000000", align: "center" };
+        waveText = this.add.text(1150, 1285, "", style);
+
+        var mappy = this.make.tilemap({ key: 'map' });
+        var terrainTiles = mappy.addTilesetImage('terrain_atlas');
+        var itemTiles = mappy.addTilesetImage('items');
         // layer.setScrollFactor(2);
         // layer.setAlpha(0.75);
-        layer.setScale(2,2);
+        //layers
+        let botLayer = mappy.createStaticLayer("bot", [terrainTiles], 0, 0).setDepth(-1);
+        let topLayer = mappy.createStaticLayer("top", [terrainTiles], 0, 0);
+        let top2Layer = mappy.createStaticLayer("top2", [terrainTiles], 0, 0);
+
+        //map collisions
+        // this.physics.add.collider(enemies, topLayer);
+
+            //by tile property
+        topLayer.setCollisionByProperty({collides:true});
+        top2Layer.setCollisionByProperty({collides:true});
+
+        this.cameras.main.setBounds(0, 0, mappy.widthInPixels, mappy.heightInPixels);
 
         // Create world bounds
         // this.physics.world.setBounds(0, 0, 1280, 720);
@@ -162,8 +184,8 @@ export class Game extends Phaser.Scene {
 
 
         // Add background, player, and reticle sprites
-        player = this.physics.add.sprite(800, 600, 'player_handgun');
-        baseCore = this.physics.add.staticSprite(800, 700, 'baseCore');
+        player = this.physics.add.sprite(1250, 900, 'player_handgun');
+        baseCore = this.physics.add.staticSprite(1265, 1200);
 
         reticle = this.physics.add.sprite(800, 700, 'target');
 
@@ -172,12 +194,21 @@ export class Game extends Phaser.Scene {
         baseCore.health = 100;
 
         // Set image/sprite properties
-        player.setOrigin(0.5, 0.5).setDisplaySize(132, 120).setCollideWorldBounds(false).setDrag(2000, 2000);
+        player.setOrigin(0.5, 0.5).setDisplaySize(80, 70).setCollideWorldBounds(false).setDrag(2000, 2000);
         reticle.setOrigin(0.5, 0.5).setDisplaySize(25, 25).setCollideWorldBounds(false);
     
         // Set camera zoom
-        this.cameras.main.zoom = 0.5;
-    
+        this.input.on('wheel', function (pointer, gameObjects, deltaX, deltaY, deltaZ) {
+            console.log(deltaY)
+            console.log(this.cameras.main.zoom)
+            if (this.cameras.main.zoom <= 1.5 && deltaY < 0) {
+                this.cameras.main.zoom -= deltaY * 0.001;
+            } else if (this.cameras.main.zoom >= 0.7 && deltaY > 0) {
+                this.cameras.main.zoom -= deltaY * 0.001;
+            } else {
+                console.log("hit scroll limit")
+            }
+        });
         // Creates object for input with WASD kets
         moveKeys = this.input.keyboard.addKeys({
             'up': Phaser.Input.Keyboard.KeyCodes.W,
@@ -260,32 +291,23 @@ export class Game extends Phaser.Scene {
                 reticle.y += pointer.movementY;
             }
         }, this);
-
+        this.physics.add.collider(player, topLayer);
+        this.physics.add.collider(player, top2Layer);
         this.physics.add.collider(baseCore, player);
         this.physics.add.collider(baseCore, enemies, this.baseCoreHit, null, this);
         this.physics.add.overlap(enemies, playerBullets, this.enemyHitCallback, null, this);
-        this.time.addEvent({
-            delay: 1500,
-            callback: () => {
-                console.log("spawning new enemy")
-                var enemy = enemies.get();
-                enemy.setPosition(baseCore.x + 1000 * (rnd.sign()), baseCore.y + 1000 * (rnd.sign()))
-                console.log(enemy);
-                if (enemy)
-                {
-                    enemy.setActive(true);
-                    enemy.setVisible(true);
-                    this.physics.moveToObject(enemy, baseCore, enemy.speed);
-                    // // place the enemy at the start of the path
-                    // enemy.startOnPath();
-                    
-                    // this.nextEnemy = time + 2000;
-                }   
-            },
+        // wave time event
+        this.newWaveStarted()
+        waveTimeEvent = this.time.addEvent({
+            delay: waveTime,
+            callback: this.newWaveStarted,
+            callbackScope: this,
             loop: true
         })
+
         this.updateBaseCoreHealthBar()
-    
+        this.cameras.main.startFollow(player, true);
+
     }
 
     // Ensures sprite speed doesnt exceed maxVelocity while update is called
@@ -344,13 +366,54 @@ export class Game extends Phaser.Scene {
         enemy.destroy();
     }
 
+    newWaveStarted() {
+        wave += 1;
+        if (enemySpawnEvent != null) {
+            enemySpawnEvent.remove();
+            enemySpawnEvent = null;
+        }
+        this.time.addEvent({
+            delay: 10000,
+            callback: () => {
+                enemySpawnEvent = this.createEnemySpawnEvent(spawnDelay);
+                spawnDelay -= 250;
+                this.newWaveSound.play();
+            }
+        })
+
+    }
+
+    createEnemySpawnEvent(spawnDelay) {
+        return this.time.addEvent({
+            delay: spawnDelay,
+            callback: () => {
+                console.log("spawning new enemy")
+                var enemy = enemies.get();
+                enemy.setPosition(baseCore.x + 1000 * (rnd.sign()), baseCore.y + 1000 * (rnd.sign()))
+                console.log(enemy);
+                if (enemy)
+                {
+                    enemy.setActive(true);
+                    enemy.setVisible(true);
+                    this.physics.moveToObject(enemy, baseCore, enemy.speed);
+                    // // place the enemy at the start of the path
+                    // enemy.startOnPath();
+                    
+                    // this.nextEnemy = time + 2000;
+                }   
+            },
+            loop: true
+        })
+
+
+    }
+
     update (time, delta)
     {
         // Rotates player to face towards reticle
         player.rotation = Phaser.Math.Angle.Between(player.x, player.y, reticle.x, reticle.y);
 
         // Camera follows player ( can be set in create )
-        this.cameras.main.startFollow(player);
 
         // Makes reticle move with player
         reticle.body.velocity.x = player.body.velocity.x;
@@ -362,13 +425,17 @@ export class Game extends Phaser.Scene {
         // Constrain position of reticle
         this.constrainReticle(reticle);
 
+        // Set wave text remaining time
+        waveText.setText(`Wave ${wave} | ` + + (waveTime - waveTimeEvent.getElapsed()).toString().substr(0, 4) / 100);
+
 
     }
 
     updateBaseCoreHealthBar() {
         baseCoreHealthBar.clear();
         baseCoreHealthBar.fillStyle(0xff0000 , 1);
-        baseCoreHealthBar.fillRect(this.scale.width + 75, this.scale.height + 250, 500 * (baseCore.health / 100), 50);
+        baseCoreHealthBar.fillRect(1265-125, 1260, 250 * (baseCore.health / 100), 25);
+
     }
       
 
