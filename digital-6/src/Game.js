@@ -220,10 +220,16 @@ export class Game extends Phaser.Scene {
         // Reduce health of enemy
         if (enemyHit.active === true && buildableHit.active === true)
         {
+            this.toast.show((object) => {
+                console.log(object)
+                object._x = buildableHit.x
+                object._y = buildableHit.y - 50
+                object.text = "-1"
+            })
             this.hitSound.play();
             buildableHit.receiveDamage(1);
             // Destroy bullet
-            enemyHit.setActive(false).setVisible(false);
+            enemyHit.destroy();
         }
     }
 
@@ -292,7 +298,7 @@ export class Game extends Phaser.Scene {
             x: player.x,
             y: player.y,
 
-            background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 20, COLOR_PRIMARY),
+            background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 20, COLOR_PRIMARY, 0),
             text: this.add.text(0, 0, '', {
                 fontSize: '24px'
             }),
@@ -432,12 +438,6 @@ export class Game extends Phaser.Scene {
             if (player.active === false)
                 return;
 
-            // this.toast.show((object) => {
-            //     console.log(object)
-            //     object._x = player.x
-            //     object._y = player.y - 100
-            //     object.text = "Test"
-            // })
 
             if (player.currentWeapon == 0) {
                 // Get bullet from bullets group
@@ -538,6 +538,12 @@ export class Game extends Phaser.Scene {
         console.log('attacking core')
         if (baseCore.health > 0) {
             baseCore.health -= 5;
+            this.toast.show((object) => {
+                console.log(object)
+                object._x = baseCore.x
+                object._y = baseCore.y - 60
+                object.text = "-5"
+            })
         }
         else {
             this.time.timeScale = 0;
