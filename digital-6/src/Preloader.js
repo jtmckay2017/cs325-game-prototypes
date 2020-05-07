@@ -95,6 +95,9 @@ export class Preloader extends Phaser.Scene {
         this.load.image('terrain_atlas', 'assets/terrain_atlas.png');
         this.load.image('items', 'assets/items.png');
 
+        this.load.image('wall', 'assets/wall.png');
+        this.load.image('turret', 'assets/turret.jpg');
+
         // this.load.image('level1', 'assets/Level1.png');
 
         //	+ lots of other required assets here

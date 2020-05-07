@@ -17,7 +17,7 @@ var gameOver = false;
 var wave = 0;
 var spawnDelay = 3000;
 var rnd = null;
-var waveTime = 120000
+var waveTime = 30000
 var enemyWaveTime = 25000
 var waveTimeEvent = null;
 var enemySpawnEvent = null;
@@ -31,7 +31,9 @@ var playerBullets = null;
 var enemies = null;
 var baseCore = null;
 
-
+// base building group
+var walls = null;
+var turrets = null;
 // controls
 var moveKeys = null;
 
@@ -129,6 +131,71 @@ var Enemy = new Phaser.Class({
 
 });
 
+var Turret = new Phaser.Class({
+
+    Extends: Phaser.GameObjects.Sprite,
+
+    initialize:
+
+    // Turret Constructor
+    function Turret (scene)
+    {
+        Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'turret')
+        this.fireSpeed = 50;
+        this.health = 5;
+    },
+
+    // Updates the position of the bullet each cycle
+    update: function (time, delta)
+    {
+
+    },
+    preUpdate: function () {
+    },
+
+    receiveDamage: function(damage) {
+        this.health -= damage;           
+        console.log('DAMAGE RECEIVED')
+        // if hp drops below 0 we deactivate this Turret
+        if(this.health <= 0) {
+            this.destroy();
+        }
+    },
+
+});
+
+var Wall = new Phaser.Class({
+
+    Extends: Phaser.GameObjects.Sprite,
+
+    initialize:
+
+    // Wall Constructor
+    function Wall (scene)
+    {
+        Phaser.GameObjects.Sprite.call(this, scene, 0, 0, 'wall')
+        this.health = 5;
+    },
+
+    // Updates the position of the bullet each cycle
+    update: function (time, delta)
+    {
+
+    },
+    preUpdate: function () {
+    },
+
+    receiveDamage: function(damage) {
+        this.health -= damage;           
+        console.log('DAMAGE RECEIVED')
+        // if hp drops below 0 we deactivate this Turret
+        if(this.health <= 0) {
+            this.destroy();
+        }
+    },
+
+});
+
 export class Game extends Phaser.Scene {
 
     constructor() {
@@ -148,6 +215,18 @@ export class Game extends Phaser.Scene {
         }
     }
 
+    buildableHitCallback(enemyHit, buildableHit)
+    {
+        // Reduce health of enemy
+        if (enemyHit.active === true && buildableHit.active === true)
+        {
+            this.hitSound.play();
+            buildableHit.receiveDamage(1);
+            // Destroy bullet
+            enemyHit.setActive(false).setVisible(false);
+        }
+    }
+
 
     preload ()
     {
@@ -163,7 +242,7 @@ export class Game extends Phaser.Scene {
 
         this.cameras.main.zoom = 1.1;
 
-
+        this.reachDistance = 700;
 
         this.time.timeScale = 1;
         gameOver = false;
@@ -175,6 +254,7 @@ export class Game extends Phaser.Scene {
 
         var style = { font: "30px Verdana", fill: "#000000", align: "center" };
         waveText = this.add.text(1150, 1285, "", style);
+        this.currentWeaponText = this.add.text(110, 75, "Rifle", style).setScrollFactor(0)
 
         var mappy = this.make.tilemap({ key: 'map' });
         var terrainTiles = mappy.addTilesetImage('terrain_atlas');
@@ -200,7 +280,8 @@ export class Game extends Phaser.Scene {
     
         playerBullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true });
         enemies = this.physics.add.group({ classType: Enemy, runChildUpdate: true });
-
+        walls = this.physics.add.group({ classType: Wall, runChildUpdate: true });
+        turrets = this.physics.add.group({ classType: Turret, runChildUpdate: true });
 
         // Add background, player, and reticle sprites
         player = this.physics.add.sprite(1250, 900, 'player_handgun');
@@ -234,7 +315,8 @@ export class Game extends Phaser.Scene {
         // Set sprite variables
         player.health = 3;
         baseCore.health = 100;
-        player.resources = [0, 0, 0]
+        player.resources = [0, 0, 0];
+        player.currentWeapon = 0;
 
         // Set image/sprite properties
         player.setOrigin(0.3, 0.5).setCollideWorldBounds(false).setDrag(2000, 2000).setDisplaySize(60, 50);
@@ -253,11 +335,35 @@ export class Game extends Phaser.Scene {
         //     }
         // });
         // Scroll change weapon
-        this.input.on('wheel', function (pointer, gameObjects, deltaX, deltaY, deltaZ) {
-            if (deltaY) {
-                // Change weapon
-            } else if (deltaY > 0) {
-                // Change weapon
+        this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
+            console.log(player.currentWeapon)
+            console.log(deltaY)
+
+            if (deltaY > 0) {
+                if (player.currentWeapon+1 > 3) {
+                    player.currentWeapon = 0
+                } else {
+                    player.currentWeapon += 1
+                }
+            } else if (deltaY < 0) {
+                if (player.currentWeapon-1 < 0) {
+                    player.currentWeapon = 3
+                } else {
+                    player.currentWeapon -= 1
+                }
+            }
+            if (player.currentWeapon == 0) {
+                this.currentWeaponText.setText("Rifle")
+                this.reachDistance = 700
+            } else if (player.currentWeapon == 1) {
+                this.currentWeaponText.setText("MultiTool")
+                this.reachDistance = 100
+            } else if (player.currentWeapon == 2) {
+                this.currentWeaponText.setText("Walls")
+                this.reachDistance = 100
+            } else if (player.currentWeapon == 3) {
+                this.currentWeaponText.setText("Turret")
+                this.reachDistance = 100
             }
         });
 
@@ -326,21 +432,31 @@ export class Game extends Phaser.Scene {
             if (player.active === false)
                 return;
 
-            this.toast.show((object) => {
-                console.log(object)
-                object._x = player.x
-                object._y = player.y
-                object.text = "Test"
-            })
+            // this.toast.show((object) => {
+            //     console.log(object)
+            //     object._x = player.x
+            //     object._y = player.y - 100
+            //     object.text = "Test"
+            // })
 
-            // Get bullet from bullets group
-            var bullet = playerBullets.get().setActive(true).setVisible(true);
+            if (player.currentWeapon == 0) {
+                // Get bullet from bullets group
+                var bullet = playerBullets.get().setActive(true).setVisible(true);
 
-            if (bullet)
-            {
-                bullet.fire(player, reticle);
-                this.shootSound.play();
+                if (bullet)
+                {
+                    bullet.fire(player, reticle);
+                    this.shootSound.play();
+                }
+            } else if (player.currentWeapon == 1) {
+                this.currentWeaponText.setText("MultiTool")
+                this.reachDistance = 100
+            } else if (player.currentWeapon == 2) {
+                this.spawnNewBuildable("wall")
+            } else if (player.currentWeapon == 3) {
+                this.spawnNewBuildable("turret")
             }
+
         }, this);
     
         // Move reticle upon locked pointer move
@@ -351,15 +467,24 @@ export class Game extends Phaser.Scene {
                 reticle.y += pointer.movementY;
             }
         }, this);
+
         this.physics.add.collider(player, topLayer);
         this.physics.add.collider(player, top2Layer);
         this.physics.add.collider(baseCore, player);
+
+        this.physics.add.collider(walls, player);
+        this.physics.add.collider(turrets, player);
+
         this.physics.add.collider(baseCore, enemies, this.baseCoreHit, null, this);
         this.physics.add.overlap(enemies, playerBullets, this.enemyHitCallback, null, this);
+
+        this.physics.add.overlap(enemies, walls, this.buildableHitCallback, null, this);
+        this.physics.add.overlap(enemies, turrets, this.buildableHitCallback, null, this);
+
         // wave time event
         this.newWaveStarted()
         waveTimeEvent = this.time.addEvent({
-            delay: waveTime-enemyWaveTime,
+            delay: waveTime,
             callback: this.newWaveStarted,
             callbackScope: this,
             loop: true
@@ -398,15 +523,15 @@ export class Game extends Phaser.Scene {
         var distY = reticle.y-player.y; // Y distance between player & reticle
 
         // Ensures reticle cannot be moved offscreen
-        if (distX > 800)
-            reticle.x = player.x+800;
-        else if (distX < -800)
-            reticle.x = player.x-800;
+        if (distX > this.reachDistance)
+            reticle.x = player.x+this.reachDistance;
+        else if (distX < -this.reachDistance)
+            reticle.x = player.x-this.reachDistance;
 
-        if (distY > 600)
-            reticle.y = player.y+600;
-        else if (distY < -600)
-            reticle.y = player.y-600;
+        if (distY > this.reachDistance)
+            reticle.y = player.y+this.reachDistance;
+        else if (distY < -this.reachDistance)
+            reticle.y = player.y-this.reachDistance;
     }
 
     baseCoreHit (baseCore, enemy) {
@@ -467,6 +592,29 @@ export class Game extends Phaser.Scene {
         })
 
 
+    }
+
+    spawnNewBuildable(type) {
+        console.log("spawning new buidlable")
+        var buildable = null
+        console.log(type)
+        if (type == "wall") {
+            buildable = walls.get();
+        } else if (type == "turret") {
+            buildable = turrets.get();
+        } else {
+            console.log("invalid buildable type")
+            return;
+        }
+        buildable.body.immovable = true;
+        buildable.setDisplaySize(60, 50);
+        buildable.setPosition(2 * Math.round(reticle.x / 2), 2 * Math.round(reticle.y / 2))
+        console.log(buildable);
+        if (buildable)
+        {
+            buildable.setActive(true);
+            buildable.setVisible(true);
+        }   
     }
 
     update (time, delta)

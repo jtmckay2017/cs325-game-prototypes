@@ -8,8 +8,8 @@ import UIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 var config = {
     type: Phaser.AUTO,
     parent: 'game',
-    width: 1280,
-    height: 720,
+    width: 1920,
+    height: 1080,
     pixelArt: false,
     antialias: true,
     backgroundColor: '#df9f71',

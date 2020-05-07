@@ -1,5 +1,10 @@
 import { Physics } from "phaser";
 
+// resource values for tilemap
+// 0 stone
+// 1 wood
+// 2 gold
+
 // Create your own variables.
 // global state variables
 var gameOver = false;
@@ -7,6 +12,9 @@ var wave = 0;
 var spawnDelay = 3000;
 var rnd = null;
 var waveTime = 30000
+
+// resources
+var resources = null
 
 var waveTimeEvent = null;
 var enemySpawnEvent = null;
