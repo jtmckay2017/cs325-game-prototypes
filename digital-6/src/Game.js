@@ -17,8 +17,8 @@ var gameOver = false;
 var wave = 0;
 var spawnDelay = 3000;
 var rnd = null;
-var waveTime = 30000
-var enemyWaveTime = 25000
+var waveTime = 60000
+var enemyWaveTime = 30000
 var waveTimeEvent = null;
 var enemySpawnEvent = null;
 
