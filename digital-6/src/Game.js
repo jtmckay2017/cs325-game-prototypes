@@ -1,4 +1,15 @@
 import { Physics } from "phaser";
+import { Toast } from 'phaser3-rex-plugins/templates/ui/ui-components.js';
+
+
+// resource values for tilemap
+// 0 stone
+// 1 wood
+// 2 gold
+
+
+const COLOR_PRIMARY = 0x4e342e;
+
 
 // Create your own variables.
 // global state variables
@@ -10,6 +21,9 @@ var waveTime = 120000
 var enemyWaveTime = 25000
 var waveTimeEvent = null;
 var enemySpawnEvent = null;
+
+// resources
+var resources = null
 
 // entities
 var player = null;
@@ -146,6 +160,11 @@ export class Game extends Phaser.Scene {
     
     create ()
     {
+
+        this.cameras.main.zoom = 1.1;
+
+
+
         this.time.timeScale = 1;
         gameOver = false;
         rnd = Phaser.Math.RND;
@@ -187,28 +206,61 @@ export class Game extends Phaser.Scene {
         player = this.physics.add.sprite(1250, 900, 'player_handgun');
         baseCore = this.physics.add.staticSprite(1265, 1200);
 
+        // Toasty
+        this.toast = this.rexUI.add.toast({
+            x: player.x,
+            y: player.y,
+
+            background: this.rexUI.add.roundRectangle(0, 0, 2, 2, 20, COLOR_PRIMARY),
+            text: this.add.text(0, 0, '', {
+                fontSize: '24px'
+            }),
+            space: {
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: 20,
+            },
+
+            duration: {
+                in: 100,
+                hold: 500,
+                out: 100,
+            },
+        })
+
         reticle = this.physics.add.sprite(800, 700, 'target');
 
         // Set sprite variables
         player.health = 3;
         baseCore.health = 100;
+        player.resources = [0, 0, 0]
 
         // Set image/sprite properties
-        player.setOrigin(0.5, 0.5).setCollideWorldBounds(false).setDrag(2000, 2000).setDisplaySize(60, 50);
-        reticle.setOrigin(0.5, 0.5).setDisplaySize(25, 25).setCollideWorldBounds(false);
+        player.setOrigin(0.3, 0.5).setCollideWorldBounds(false).setDrag(2000, 2000).setDisplaySize(60, 50);
+        reticle.setOrigin(0.3, 0.5).setDisplaySize(25, 25).setCollideWorldBounds(false);
     
         // Set camera zoom
+        // this.input.on('wheel', function (pointer, gameObjects, deltaX, deltaY, deltaZ) {
+        //     console.log(deltaY)
+        //     console.log(this.cameras.main.zoom)
+        //     if (this.cameras.main.zoom <= 1.5 && deltaY < 0) {
+        //         this.cameras.main.zoom -= deltaY * 0.001;
+        //     } else if (this.cameras.main.zoom >= 0.7 && deltaY > 0) {
+        //         this.cameras.main.zoom -= deltaY * 0.001;
+        //     } else {
+        //         console.log("hit scroll limit")
+        //     }
+        // });
+        // Scroll change weapon
         this.input.on('wheel', function (pointer, gameObjects, deltaX, deltaY, deltaZ) {
-            console.log(deltaY)
-            console.log(this.cameras.main.zoom)
-            if (this.cameras.main.zoom <= 1.5 && deltaY < 0) {
-                this.cameras.main.zoom -= deltaY * 0.001;
-            } else if (this.cameras.main.zoom >= 0.7 && deltaY > 0) {
-                this.cameras.main.zoom -= deltaY * 0.001;
-            } else {
-                console.log("hit scroll limit")
+            if (deltaY) {
+                // Change weapon
+            } else if (deltaY > 0) {
+                // Change weapon
             }
         });
+
         // Creates object for input with WASD kets
         moveKeys = this.input.keyboard.addKeys({
             'up': Phaser.Input.Keyboard.KeyCodes.W,
@@ -238,7 +290,7 @@ export class Game extends Phaser.Scene {
         });
 
 
-    
+        
         // Stops player acceleration on uppress of WASD keys
         this.input.keyboard.on('keyup_W', (event) => {
             if (moveKeys['down'].isUp)
@@ -256,6 +308,7 @@ export class Game extends Phaser.Scene {
             if (moveKeys['left'].isUp)
                 player.setAccelerationX(0);
         });
+        //
     
         // Locks pointer on mousedown
         this.game.canvas.addEventListener('mousedown', () => {
@@ -272,6 +325,13 @@ export class Game extends Phaser.Scene {
         this.input.on('pointerdown', (pointer, time, lastFired) => {
             if (player.active === false)
                 return;
+
+            this.toast.show((object) => {
+                console.log(object)
+                object._x = player.x
+                object._y = player.y
+                object.text = "Test"
+            })
 
             // Get bullet from bullets group
             var bullet = playerBullets.get().setActive(true).setVisible(true);
@@ -373,7 +433,7 @@ export class Game extends Phaser.Scene {
             enemySpawnEvent = null;
         }
         this.time.addEvent({
-            delay: waveTime - 30000,
+            delay:  waveTime-enemyWaveTime,
             callback: () => {
                 enemySpawnEvent = this.createEnemySpawnEvent(spawnDelay);
                 spawnDelay -= 250;

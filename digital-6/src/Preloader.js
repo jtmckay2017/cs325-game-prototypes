@@ -79,8 +79,8 @@ export class Preloader extends Phaser.Scene {
 
         //	Here we load the rest of the assets our this needs.
         //	As this is just a Project Template I've not provided these assets, swap them for your own.
-        this.load.image('titlePage', 'assets/title.jpg');
-        this.load.atlas('playButton', 'assets/play_button.png', 'assets/play_button.json');
+        // this.load.image('titlePage', 'assets/title.jpg');
+        // this.load.atlas('playButton', 'assets/play_button.png', 'assets/play_button.json');
         this.load.audio('day_desert_ambient', ['assets/day_desert_ambient.mp3']);
         this.load.audio('dark_desert_ambient', ['assets/dark_desert_ambient.mp3']);
         this.load.audio('day_to_dark_change', ['assets/day_to_dark_change_sfx.mp3']);
@@ -95,7 +95,7 @@ export class Preloader extends Phaser.Scene {
         this.load.image('terrain_atlas', 'assets/terrain_atlas.png');
         this.load.image('items', 'assets/items.png');
 
-        this.load.image('level1', 'assets/Level1.png');
+        // this.load.image('level1', 'assets/Level1.png');
 
         //	+ lots of other required assets here
         this.load.html('nameForm', 'assets/text/nameForm.html');
