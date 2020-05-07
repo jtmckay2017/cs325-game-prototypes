@@ -227,6 +227,7 @@ export class Game extends Phaser.Scene {
                 object.text = "-1"
             })
             this.hitSound.play();
+            buildableHit.health = buildableHit.health - 1;
             buildableHit.receiveDamage(1);
             // Destroy bullet
             enemyHit.destroy();
